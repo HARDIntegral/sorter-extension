@@ -12,5 +12,7 @@ void printNode(node_t* node);
 void add(node_t** head, int value);
 int length(node_t** head);
 node_t* getNode(node_t** head, int index);
+void removeNode(node_t** head, int index);
+void insertNode(node_t** head, int value, int index);
 
 #endif //list_h

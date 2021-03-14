@@ -53,7 +53,7 @@ int length(node_t** head) {
 node_t* getNode(node_t** head, int index) {
     node_t* tmp = *head;
     int i = 0;
-    if (index > length(head)) {
+    if (index < 0 || index > length(head)) {
         return NULL;
     }
     while (i < index) {
@@ -61,4 +61,31 @@ node_t* getNode(node_t** head, int index) {
         i++;
     }
     return tmp;
+}
+
+void removeNode(node_t** head, int index) {
+    node_t* prev_node = getNode(head, index - 1);
+    if (index < 0 || index > length(head)) {
+        return;
+    } else if (index == length(head)) {
+        prev_node->next = NULL;
+    } else {
+        node_t* current_node = getNode(head, index);
+        prev_node->next = current_node->next; 
+        free(current_node);
+        current_node = NULL;
+    }
+}
+
+void insertNode(node_t** head, int value, int index) {
+    node_t* prev_node = getNode(head, index - 1);
+    if (index < 0 || index > length(head)) {
+        return;
+    } else if (index == length(head) + 1) {
+        add(head, value);
+    } else {
+        node_t* new_node = createNode(value);
+        new_node->next = prev_node->next;
+        prev_node->next = new_node;
+    }
 }
