@@ -4,25 +4,21 @@
 
 #include "includes/list.h"
 
+#include "sorters/bubble.h"
+#include "sorters/counting.h"
+#include "sorters/heap.h"
+#include "sorters/insertion.h"
+#include "sorters/merge.h"
+#include "sorters/quick.h"
+#include "sorters/selection.h"
+
 int main() {
     node_t* head = NULL;
     
-    for (int i = 0; i < 10; i++) {
-        add(&head, i);
+    for (int i = 0; i < 20; i++) {
+        add(&head, rand() % 10);
     }
-    printf("length - %d\n", length(&head));
-    print(head);
 
-    node_t* node = getNode(&head, 11);
-    if (node != NULL) {
-        printNode(node);
-    } else {
-        printf("NODE IS NULL\n");
-    }    
-
-    removeNode(&head, 5);
     print(head);
-
-    insertNode(&head, 5, 8);
-    print(head);
+    counting_sort(&head);
 }

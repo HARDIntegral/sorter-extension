@@ -14,5 +14,6 @@ int length(node_t** head);
 node_t* getNode(node_t** head, int index);
 void removeNode(node_t** head, int index);
 void insertNode(node_t** head, int value, int index);
+void swap(node_t** head, int index_a, int index_b);
 
 #endif //list_h

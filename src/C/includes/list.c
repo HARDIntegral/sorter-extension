@@ -2,6 +2,9 @@
 #include <stdlib.h>
 #include <malloc.h>
 
+#define MAX(a, b) (((x) >= (y)) ? (x) : (y))
+#define MIN(a, b) (((x) <= (y)) ? (x) : (y))
+
 struct node {
     int value;
     struct node* next;
@@ -87,5 +90,17 @@ void insertNode(node_t** head, int value, int index) {
         node_t* new_node = createNode(value);
         new_node->next = prev_node->next;
         prev_node->next = new_node;
+    }
+}
+
+void swap(node_t** head, int index_a, int index_b) {
+    if (index_a < 0 || index_a > length(head) || index_b < 0 || index_b > length(head)) {
+        return;
+    } else {
+        node_t* node_a = getNode(head, index_a);
+        node_t* node_b = getNode(head, index_b);
+        int tmp = node_a->value;
+        node_a->value = node_b->value;
+        node_b->value = tmp; 
     }
 }
