@@ -104,3 +104,11 @@ void swap(node_t** head, int index_a, int index_b) {
         node_b->value = tmp; 
     }
 }
+
+void revalue(node_t** head, int index, int value) {
+    if (index < 0 || index > length(head)) {
+        return;
+    }
+    node_t* element = getNode(head, index);
+    element->value = value;
+}
