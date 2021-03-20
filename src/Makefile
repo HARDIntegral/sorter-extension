@@ -6,8 +6,8 @@ OBJ = sort
 
 all: $(OBJ)
 
-$(OBJ): main.o list.o bubble.o counting.o heap.o insertion.o merge.o quick.o radix.o selection.o
-	$(CC) main.o list.o bubble.o counting.o heap.o insertion.o merge.o quick.o selection.o -o $(OBJ)
+$(OBJ): main.o list.o vector.o bubble.o counting.o heap.o insertion.o merge.o quick.o radix.o selection.o
+	$(CC) main.o list.o vector.o bubble.o counting.o heap.o insertion.o merge.o quick.o selection.o -o $(OBJ)
 	@echo "[BUILD SUCCESSFUL]"
 
 main.o: main.c
@@ -15,6 +15,8 @@ main.o: main.c
 	$(CC) $(CFLAGS) main.c
 list.o: $(INCLUDEDIR)list.c
 	$(CC) $(CFLAGS) $(INCLUDEDIR)list.c
+vector.o: $(INCLUDEDIR)vector.c
+	$(CC) $(CFLAGS) $(INCLUDEDIR)vector.c
 bubble.o: $(SORTDIR)bubble.c
 	$(CC) $(CFLAGS) $(SORTDIR)bubble.c
 counting.o: $(SORTDIR)counting.c

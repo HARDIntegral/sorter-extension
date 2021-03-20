@@ -58,11 +58,7 @@ void counting_sort(node_t** head) {
     // Swap values into the sorted list
     node_t* tmp_b = *head;
     while (tmp_b != NULL) {
-        node_t* selected_node = getNode(head, tmp_b->value);
-        int place = selected_node->value;
-        revalue(&sorted_head, place - 1, tmp_b->value);
-        selected_node->value--;
-        tmp_b = tmp_b->next;
+        // TODO: Make the swapper
     }
 
     print(sorted_head);
