@@ -1,4 +1,6 @@
 .history/
 .vscode/
+obj/
+build/
 *.exe
 *.o

@@ -27,7 +27,7 @@ def _exit():
 def main():
     while condition:
         _clock.tick(60)
-        screen.fill((0, 0, 0))
+        screen.fill((80, 190, 225))
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 _exit()

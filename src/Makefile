@@ -1,13 +1,28 @@
 CC = gcc
+MOVE = mv
 CFLAGS = -c -Wall
 INCLUDEDIR = includes/
 SORTDIR = sorters/
+OBJDIR = ../obj/
+BUILDDIR = ../build/
 OBJ = sort
 
 all: $(OBJ)
 
 $(OBJ): main.o list.o vector.o bubble.o counting.o heap.o insertion.o merge.o quick.o radix.o selection.o
 	$(CC) main.o list.o vector.o bubble.o counting.o heap.o insertion.o merge.o quick.o selection.o -o $(OBJ)
+	$(MOVE) main.o $(OBJDIR)
+	$(MOVE) list.o $(OBJDIR)
+	$(MOVE) vector.o $(OBJDIR)
+	$(MOVE) bubble.o $(OBJDIR)
+	$(MOVE) counting.o $(OBJDIR)
+	$(MOVE) heap.o $(OBJDIR)
+	$(MOVE) insertion.o $(OBJDIR)
+	$(MOVE) merge.o $(OBJDIR)
+	$(MOVE) quick.o $(OBJDIR)
+	$(MOVE) radix.o $(OBJDIR)
+	$(MOVE) selection.o $(OBJDIR)
+	$(MOVE) $(OBJ).exe $(BUILDDIR)
 	@echo "[BUILD SUCCESSFUL]"
 
 main.o: main.c
@@ -38,7 +53,7 @@ exec:
 	@echo "[EXECUTING]"
 	@echo "------------------------------------------------------------------------------------------"
 	@echo ""
-	./sort
+	$(BUILDDIR)./sort
 	@echo ""
 	@echo "------------------------------------------------------------------------------------------"
 	@echo "[EXECUTION COMPLETE]"
@@ -46,4 +61,7 @@ exec:
 clean:
 	@echo "[Cleaning]"
 	rm -rf *.exe
-	rm -rf *.o
+	rm -rf $(OBJ)*.o
+
+py:
+	py gui.py
