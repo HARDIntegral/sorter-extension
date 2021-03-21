@@ -2,9 +2,6 @@
 #include <stdlib.h>
 #include <malloc.h>
 
-#define MAX(a, b) (((x) >= (y)) ? (x) : (y))
-#define MIN(a, b) (((x) <= (y)) ? (x) : (y))
-
 /*
  * Structure: element
  * ------------------------------------------------
@@ -20,42 +17,31 @@ struct element {
 typedef struct element node_v;
 
 /*
- * FUNCTION: printVect
+ * Structure: vector
  * ------------------------------------------------
- * Iterates though the vector starting from the 
- * head of the vector. Prints vector in order.
- * 
- * head: the head of the vector
- * 
- * returns: void    
+ * Groups together the pointers to the head and 
+ * tail of the vector along with its length.
  */
-void printVect(node_v* head) {
-    node_v* tmp = head;
-    while (tmp != NULL) {
-        printf("%d ", tmp->value);
-        tmp = tmp->next;
-    }
-    printf("\n");
-}
+struct vector {
+    struct element* head;
+    struct element *tail;
+    int length;
+};
+typedef struct vector vector;
 
 /*
- * FUNCTION: printVectRev
+ * Function: createVect
  * ------------------------------------------------
- * Iterates though the vector starting from the 
- * tail of the vector. Prints vector in reverse
- * order.
+ * Creates a vector and initializes its values
  * 
- * tail:    the tail of the vector
- * 
- * returns: void    
+ * returns: type vector
  */
-void printVectRev(node_v* tail) {
-    node_v* tmp = tail;
-    while (tmp != NULL) {
-        printf("%d ", tmp->value);
-        tmp = tmp->prev;
-    }
-    printf("\n");
+vector* createVect() {
+    vector* new = (vector*)malloc(sizeof(vector));
+    new->head = NULL;
+    new->tail = NULL;
+    new->length = 0;
+    return new;
 }
 
 /*
@@ -79,23 +65,77 @@ node_v* createVectNode(int value) {
 }
 
 /*
- * Function: len
+ * Function: getElement
  * ------------------------------------------------
- * Determines the length of a vector by iterating
- * through it starting from the head of the vector.
+ * Returns an element from a vector froma a given 
+ * index. Iterates through the vector from the most
+ * efficient end.
  * 
- * head:    the head of the vector
+ * vect:    the address of an existing vector
+ * index:   the index of the vector requested
  * 
- * returns: int
+ * returs:  type element
  */
-int len(node_v** head) {
-    node_v* tmp = *head;
-    int len = 0;
+node_v* getElement(vector** vect, int index) {
+    int len = (*vect)->length;
+    if (index > len - 1 || index < 0) {
+        return NULL;
+    } else if (index > len / 2) {
+        int indexFromTail = len - 1;
+        node_v* tmp = (*vect)->tail;
+        while(indexFromTail > index) {
+            tmp = tmp->prev;
+            indexFromTail--;
+        }
+        return tmp;
+    } else {
+        int indexFromHead = 0;
+        node_v* tmp = (*vect)->head;
+        while (indexFromHead < index) {
+            tmp = tmp->next;
+            indexFromHead++;
+        }
+        return tmp;
+    }
+}
+
+/*
+ * FUNCTION: printVect
+ * ------------------------------------------------
+ * Iterates though the vector starting from the 
+ * head of the vector. Prints vector in order.
+ * 
+ * vect: the vector
+ * 
+ * returns: void    
+ */
+void printVect(vector* vect) {
+    node_v* tmp = vect->head;
     while (tmp != NULL) {
-        len++;
+        printf("%d ", tmp->value);
         tmp = tmp->next;
     }
-    return len;
+    printf("\n");
+}
+
+/*
+ * FUNCTION: printVectRev
+ * ------------------------------------------------
+ * Iterates though the vector starting from the 
+ * tail of the vector. Prints vector in reverse
+ * order.
+ * 
+ * vect:    the vector
+ * 
+ * returns: void    
+ */
+void printVectRev(vector* vect) {
+    node_v* tmp = vect->tail;
+    while (tmp != NULL) {
+        printf("%d ", tmp->value);
+        tmp = tmp->prev;
+    }
+    printf("\n");
 }
 
 /*
@@ -103,25 +143,24 @@ int len(node_v** head) {
  * ------------------------------------------------
  * Adds an element to the end of the vector.
  * 
- * &head:   the address of the head of an existing
- *          vector
- * &tail:   the address of the tail of an existing
- *          vector
+ * vect:    the address of an existing vector
  * value:   the value the element is to contain
  * 
  * returns: void
  */
-void addEnd(node_v** head, node_v** tail, int value) {
-    node_v* tmp = *tail;
+void addEnd(vector** vect, int value) {
+    node_v* tmp = (*vect)->tail;
     node_v* new_node = createVectNode(value);
     if (tmp == NULL) {
-        *tail = new_node;
-        *head = *tail;
+        (*vect)->tail = new_node;
+        (*vect)->head = (*vect)->tail;
+        (*vect)->length++;
     } else {
         new_node->next = NULL;
         new_node->prev = tmp;
         tmp->next = new_node;
-        *tail = new_node;
+        (*vect)->tail = new_node;
+        (*vect)->length++;
     }
 }
 
@@ -130,24 +169,165 @@ void addEnd(node_v** head, node_v** tail, int value) {
  * ------------------------------------------------
  * Adds an element to the beginning of the vector.
  * 
- * &head:   the address of the head of an existing
- *          vector
- * &tail:   the address of the tail of an existing
- *          vector
+ * vect:    the address of an existing vector
  * value:   the value the element is to contain
  * 
  * returns: void
  */
-void addHead(node_v** head, node_v** tail, int value) {
-    node_v* tmp = *head;
+void addHead(vector** vect, int value) {
+    node_v* tmp = (*vect)->head;
     node_v* new_node = createVectNode(value);
     if (tmp == NULL) {
-        *head = new_node;
-        *tail = *head;
+        (*vect)->head = new_node;
+        (*vect)->tail = (*vect)->head;
+        (*vect)->length++;
     } else {
         new_node->next = tmp;
         new_node->prev = NULL;
         tmp->prev = new_node;
-        *head = new_node;
+        (*vect)->head = new_node;
+        (*vect)->length++;
     }
+}
+
+/*
+ * Function: removeElement
+ * ------------------------------------------------
+ * Removes an element from a vector at a specific 
+ * index.
+ * 
+ * vect:    the address of an existing vector
+ * index:   the index of the element to remove
+ */
+void removeElement(vector** vect, int index) {
+    node_v* remove = getElement(vect, index);
+    if (remove != NULL) {
+        if (remove->prev == NULL) {
+            (*vect)->head = remove->next;
+            (*vect)->head->prev = NULL;
+        } else if (remove->next == NULL) {
+            (*vect)->tail = remove->prev;
+            (*vect)->tail->next = NULL;
+        } else {
+            node_v* tmp_prev = remove->prev;
+            node_v* tmp_next = remove->next;
+            tmp_prev->next = remove->next;
+            tmp_next->prev = remove->prev;
+        }
+        (*vect)->length--;
+    }
+}
+
+/*
+ * Function: pop
+ * ------------------------------------------------
+ * Removes the last element in a vector.
+ * 
+ * vect:    the address of an existing vector
+ * 
+ * returns: void 
+ */
+void pop(vector** vect) {
+    (*vect)->tail = (*vect)->tail->prev;
+}
+
+/*
+ * Function: burst
+ * ------------------------------------------------
+ * Removes the first element in a vector.
+ * 
+ * vect:    the address of an existing vector
+ * 
+ * returns: void 
+ */
+void burst(vector** vect) {
+    (*vect)->head = (*vect)->head->next;
+}
+
+/*
+ * Function: hotSwap
+ * ------------------------------------------------
+ * Swaps the values of an element in vector at a 
+ * given index with the value of an element at the 
+ * next index.
+ * 
+ * vect:    the address of an existing vector
+ * index:   the index of the vector to hot swap
+ * 
+ * returns: void 
+ */
+void hotSwap(vector** vect, int index) {
+    if (index < (*vect)->length - 1) {
+        node_v* self = getElement(vect, index);
+        if (self != NULL) {
+            int holder = self->value;
+            self->value = self->next->value;
+            self->next->value = holder;
+        }
+    }
+}
+
+/*
+ * Function: coldSwap
+ * ------------------------------------------------
+ * Swaps the values of an element in vector at a 
+ * given index with the value of an element at the 
+ * next index.
+ * 
+ * vect:    the address of an existing vector
+ * index:   the index of the vector to cold swap
+ * 
+ * returns: void 
+ */
+void coldSwap(vector** vect, int index) {
+    if (index > 0) {
+        node_v* self = getElement(vect, index);
+        if (self != NULL) {
+            int holder = self->value;
+            self->value = self->prev->value;
+            self->prev->value = holder;
+        }
+    }
+}
+
+/*
+ * Function: swap
+ * ------------------------------------------------
+ * Swaps the values of an element in a vector at a 
+ * given index with another element in the same 
+ * vector in another index. 
+ * 
+ * vect:    the address of an existing vector
+ * index_a: one of the indicies for value swapping
+ * index_b: the other index for value swapping
+ * 
+ * returns: void
+ */
+void vectSwap(vector** vect, int index_a, int index_b) {
+    int len = (*vect)->length;
+    if ((index_a < len) && (index_b < len) && (index_a >= 0) && (index_b >= 0)) {
+        node_v* a = getElement(vect, index_a);
+        node_v* b = getElement(vect, index_b);
+        if (a != NULL && b != NULL) {
+            int holder = a->value;
+            a->value = b->value;
+            b->value = holder;
+        }
+    }
+}
+
+/*
+ * Function: revalueElement
+ * ------------------------------------------------
+ * Revalues an element in a vector at a given index
+ * with a provided value.
+ * 
+ * vect:    the address of an existing vector
+ * index:   the index of the vector to revalue
+ * value:   the new value the element
+ * 
+ * returns: void
+ */
+void revalueElement(vector** vect, int index, int value) {
+    getElement(vect, index)->value = value;
 }

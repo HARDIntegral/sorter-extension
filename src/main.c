@@ -28,16 +28,21 @@ int main() {
     counting_sort(&head);
     */
 
-   node_v* head = NULL;
-   node_v* tail = NULL;
+    vector* vect1 = createVect();
 
-   addEnd(&head, &tail, 8);
-   addHead(&head, &tail, 5);
-   addHead(&head, &tail, 7);
-   addHead(&head, &tail, 23);
+    addEnd(&vect1, 8);
+    addHead(&vect1, 5);
+    addHead(&vect1, 7);
+    addHead(&vect1, 23);
+    addEnd(&vect1, 6);
 
-   printVect(head);
-   printVectRev(tail);
+    printVect(vect1);
+    printVectRev(vect1);
 
-   printf("Vector Length - %d\n", len(&head));
+    revalueElement(&vect1, 3, 34);
+
+    printVect(vect1);
+    printVectRev(vect1);
+
+    printf("vect1 length - %d\n",vect1->length);
 }

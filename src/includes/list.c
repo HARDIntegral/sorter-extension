@@ -74,7 +74,7 @@ node_t* createListNode(int value) {
  * ------------------------------------------------
  * Adds a node to the end of the list.
  * 
- * &head:   the address of the head of an existing
+ * head:    the address of the head of an existing
  *          list
  * value:   the value the node is to contain
  * 
@@ -98,7 +98,7 @@ void add(node_t** head, int value) {
  * Determines the length of a list by iterating
  * through it starting from the head of the list.
  * 
- * &head:   the address of the head of an existing 
+ * head:    the address of the head of an existing 
  *          list
  * 
  * returns: int
@@ -119,7 +119,7 @@ int length(node_t** head) {
  * ------------------------------------------------
  * Returns a node of a list at a specific index.
  * 
- * &head:   the address of the head of an existing 
+ * head:    the address of the head of an existing 
  *          list
  * index:   the index of the node that is requested
  * 
@@ -143,7 +143,7 @@ node_t* getNode(node_t** head, int index) {
  * ------------------------------------------------
  * Removes a node of a list at a specific index.
  * 
- * &head:   the address of the head of an existing 
+ * head:    the address of the head of an existing 
  *          list
  * index:   the index of the node that is to be 
  *          removed
@@ -170,7 +170,7 @@ void removeNode(node_t** head, int index) {
  * Inserts a node into a list so that the new 
  * element of the list has a specific index.
  * 
- * &head:   the address of the head of an existing 
+ * head:    the address of the head of an existing 
  *          list
  * value:   the value the node
  * index:   the index of the node that is to be 
@@ -196,7 +196,7 @@ void insertNode(node_t** head, int value, int index) {
  * ------------------------------------------------
  * Swaps the values of two nodes of goven indicies.
  * 
- * &head:   the address of the head of an existing 
+ * head:    the address of the head of an existing 
  *          list
  * index_a: one of the indicies that would have its
  *          value swaped
@@ -222,7 +222,7 @@ void swap(node_t** head, int index_a, int index_b) {
  * ------------------------------------------------
  * Will revalue a node of a list at a given index.
  * 
- * &head:   the address of the head of an existing 
+ * head:    the address of the head of an existing 
  *          list
  * index:   the index of the node that is to be 
  *          revalued

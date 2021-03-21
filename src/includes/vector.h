@@ -8,10 +8,24 @@ struct element {
 };
 typedef struct element node_v;
 
-void printVect(node_v* head);
-void printVectRev(node_v* tail);
-int len(node_v** head);
-void addEnd(node_v** head, node_v** tail, int value);
-void addHead(node_v** head, node_v** tail, int value);
+struct vector {
+    struct element* head;
+    struct element *tail;
+    int length;
+};
+typedef struct vector vector;
+
+vector* createVect();
+void printVect(vector* vect);
+void printVectRev(vector* vect);
+void addEnd(vector** vect, int value);
+void addHead(vector** vect, int value);
+void removeElement(vector** vect, int index);
+void pop(vector** vect);
+void burst(vector** vect);
+void hotSwap(vector** vect, int index);
+void coldSwap(vector** vect, int index);
+void vectSwap(vector** vect, int index_a, int index_b);
+void revalueElement(vector** vect, int index, int value);
 
 #endif //vect_h
