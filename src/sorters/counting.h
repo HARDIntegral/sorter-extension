@@ -3,6 +3,6 @@
 
 #include "../includes/list.h"
 
-void counting_sort(node_t** head);
+void countingSort(vector** vect);
 
 #endif //counting_h

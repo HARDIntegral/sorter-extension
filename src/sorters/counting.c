@@ -1,65 +1,82 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <malloc.h>
+#include <limits.h>
 
-#include "../includes/list.h"
+#include "../includes/vector.h"
 
-int highest_value(node_t** head) {
-    node_t* tmp = *head;
-    int i = 0;
+int power10(int highest_value) {
+    int i = 1;
+    while(!(i >= highest_value))
+        i *= 10;
+    return i;
+}
+
+int highestValue(vector** vect) {
+    node_v* tmp = (*vect)->head;
+    int i = INT_MIN;
     while(tmp != NULL) {
-        if (tmp->value > i) {
+        if(tmp->value > i)
             i = tmp->value;
-        }
         tmp = tmp->next;
     }
     return i;
 }
 
-int power_10(int highest_value) {
-    int i = 1;
-    while(!(i >= highest_value)) {
-        i *= 10;
-    }
-    return i;
-}
-
-void counting_sort(node_t** head) {
-    // To make a linked list that will store the frequency of values
-    node_t* count_head = NULL;
-    for(int i = 0; i < power_10(highest_value(head)); i++) {
-        add(&count_head, 0);
-    }
-    node_t* tmp_a = *head;
-    node_t* current_node;
-    // Populate the frequency list with the actual frequency of the values in the input list
-    while(tmp_a != NULL) {
-        for (int i = 0; i < length(&count_head); i++) {
-            if (tmp_a->value == i) {
-                current_node = getNode(&count_head, i);
-                current_node->value = current_node->value + 1;
-            }
-        }
-        tmp_a = tmp_a->next;
-    }
-    // Modify the frequency list to represent a cumulative frequency
-    for (int i = 1; i <= length(&count_head) - 1; i++) {
-        node_t* self = getNode(&count_head, i);
-        node_t* before = getNode(&count_head, i - 1);
-        self->value = self->value + before->value;
+void countingSort(vector** vect) {
+    // Initialize a vector to contain counted elements to all values being 0
+    vector* frequency = createVect();
+    for(int i = 0; i < power10(highestValue(vect)); i++)
+        addHead(&frequency, 0);
+    
+    // Counts the occurance of values in the original vector
+    // Stores the frequency of values in the previously created vector
+    node_v* tmp = (*vect)->head;
+    while(tmp != NULL){
+        revalueElement(
+            &frequency, 
+            tmp->value, 
+            getElement(&frequency, tmp->value)->value + 1
+        );
+        tmp = tmp->next;
     }
 
-    // Initialize a linked list and set all values to 0 as a default
-    node_t* sorted_head = NULL;
-    for (int i = 0; i < length(head); i++) {
-        add(&sorted_head, 0);
+    // Adds values of all preious elements to the current element of the frequency vector
+    tmp = frequency->head;
+    int indexCounter = 0;
+    while(tmp != NULL){
+        node_v* currentElement = getElement(&frequency, indexCounter);
+        if (currentElement->prev != NULL)
+            revalueElement(
+                &frequency, 
+                indexCounter, 
+                currentElement->value + currentElement->prev->value
+            );
+        indexCounter++;
+        tmp = tmp->next;
     }
 
-    // Swap values into the sorted list
-    node_t* tmp_b = *head;
-    while (tmp_b != NULL) {
-        // TODO: Make the swapper
+    // Creates a new vector to store the sorted values
+    vector* copy = createVect();
+    for (int i = 0; i < (*vect)->length; i++)
+        addHead(&copy, 0);
+
+    // Sorting
+    tmp = (*vect)->head;
+    while(tmp != NULL) {
+        node_v* currentCount = getElement(&frequency, tmp->value);
+        revalueElement(&copy, currentCount->value-- - 1, tmp->value);
+        tmp = tmp->next;
     }
 
-    print(sorted_head);
+    // Copies the values from the sorted vector to the original vector
+    node_v* original = (*vect)->head;
+    node_v* sorted = copy->head;
+    indexCounter = 0;
+    while (original != NULL) {
+        revalueElement(vect, indexCounter, sorted->value);
+        indexCounter++;
+        original = original->next;
+        sorted = sorted->next;
+    }
 }

@@ -15,34 +15,16 @@
 
 int main() {
     printf("\n");
-    /*
-    Im testing the vector file, this sort of works for the counting sort file
 
     node_t* head = NULL;
+    vector* vect1 = createVect();
     
     for (int i = 0; i < 20; i++) {
         add(&head, rand() % 10);
+        addHead(&vect1, rand() % 100);
     }
 
-    print(head);
-    counting_sort(&head);
-    */
-
-    vector* vect1 = createVect();
-
-    addEnd(&vect1, 8);
-    addHead(&vect1, 5);
-    addHead(&vect1, 7);
-    addHead(&vect1, 23);
-    addEnd(&vect1, 6);
-
     printVect(vect1);
-    printVectRev(vect1);
-
-    revalueElement(&vect1, 3, 34);
-
-    printVect(vect1);
-    printVectRev(vect1);
-
-    printf("vect1 length - %d\n",vect1->length);
+    countingSort(&vect1);
+    printVect(vect1);    
 }

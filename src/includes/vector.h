@@ -16,6 +16,7 @@ struct vector {
 typedef struct vector vector;
 
 vector* createVect();
+node_v* getElement(vector** vect, int index);
 void printVect(vector* vect);
 void printVectRev(vector* vect);
 void addEnd(vector** vect, int value);
