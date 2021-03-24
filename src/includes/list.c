@@ -31,18 +31,6 @@ node_t* createListNode(int value) {
     return result;
 }
 
-void add(node_t** head, int value) {
-    node_t* tmp = *head;
-    node_t* new = createListNode(value);
-    if (tmp == NULL) {
-        *head = new;
-    } else {
-        while (tmp->next != NULL)
-            tmp = tmp->next;
-        tmp->next = new;
-    }
-}
-
 int length(node_t** head) {
     node_t* tmp = *head;
     int len = 0;
@@ -66,11 +54,38 @@ node_t* getNode(node_t** head, int index) {
     return tmp;
 }
 
+void add(node_t** head, int value) {
+    node_t* tmp = *head;
+    node_t* new = createListNode(value);
+    if (tmp == NULL) {
+        *head = new;
+    } else {
+        while (tmp->next != NULL)
+            tmp = tmp->next;
+        tmp->next = new;
+    }
+}
+
+void insert(node_t** head, int value, int index) {
+    if (index < 0 || index > length(head)) {
+        return;
+    }
+    node_t* new = createListNode(value);
+    node_t* current = getNode(head, index);
+    node_t* curr_prev = getNode(head, index - 1);
+    if (new != NULL && current != NULL && curr_prev != NULL) {
+        curr_prev->next = new;
+        new->next = current;
+    }
+}
+
 void removeNode(node_t** head, int index) {
     node_t* prev_node = getNode(head, index - 1);
     if (index < 0 || index > length(head)) {
         return;
     } else if (index == length(head)) {
+        // This may break idk
+        free(prev_node->next);
         prev_node->next = NULL;
     } else {
         node_t* current_node = getNode(head, index);

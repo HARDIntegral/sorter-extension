@@ -122,14 +122,19 @@ void removeElement(vector** vect, int index) {
         }
         (*vect)->length--;
     }
+    
+    // The free may break things, have to be cautious
+    free(remove);
+    if (remove != NULL) 
+        printf("FREE FAILED");
 }
 
 void pop(vector** vect) {
-    (*vect)->tail = (*vect)->tail->prev;
+    removeElement(vect, (*vect)->length - 1);
 }
 
 void burst(vector** vect) {
-    (*vect)->head = (*vect)->head->next;
+    removeElement(vect, 0);
 }
 
 void hotSwap(vector** vect, int index) {
